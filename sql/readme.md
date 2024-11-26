@@ -25,7 +25,7 @@ A internal node consist of :
 >      1. _kv[0]_ = _position_, therefore we don't need to store offset of _kv[0]_;
 >      2. _kv[i] = position + len(kv[0]) + ... + len(kv[i-1])_, and we can make : _offset[I] =len(kv[0]) + ... + len(kv[I-1])_
 >2. **The offset of the first KV pairs is always zero, so it is not stored in the list of offsets**.
->3. We store the offset to the end of the last KV pair in the offset list, which is used to determine the size of the node
+>3. We store the offset to the end of the last KV pair in the offset list, which is used to determine the size of the node;
 >4. You might notice an interesting detail of the configuration of the node that we don't store the offset of the first kv pairs, though the length of ptrs stills equals to the length of offsets. That's because we store an extra information for the size of the node as the description in <3>. The configuration of a node with 2 keys looks like this :
 >   1. `Type` -> `2` -> `ptr[0], ptr[1]`, -> `offset[1], SizeOfNode`, -> `kv[0], kv[1]`
 
@@ -180,9 +180,71 @@ classDef back fill:#969,stroke:#333;
 classDef op fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
 ```
 
+### mapping relationship between offsets and KV pairs
+
+1. len(offsets) == nkeys && len(kvs) == nkeys;
+2. We have nkeys of kv pairs and we have nkeys - 1 of offset pointer to kv pairs;
+3. offsets[nkeys - 1] point to endOfNode, which is the size of current node.
+4. In conclusion, we don't save the offset of first kv pairs and then shift all the remaining elements to the left for one step; After that, we fill a special offset in the end of the array which point to the end of kv pairs that indicate the size of current node.
+
+```mermaid
+block-beta
+columns 9
+
+offset_0["o[0]"]
+offset_1["o[1]"]
+offset_2["..."]:2
+offset_3["o[i]"]
+offset_4["..."]
+offset_N["o[nkeys - 2]"]
+offset_s["offsetToEnd"]
+space
+
+space:18
+
+
+kv_1["kv[0]"]
+kv_2["kv[1]"]
+kv_8["kv[2]"]
+kv_3["..."]:2
+kv_4["kv[i + 1]"]
+kv_5["..."]
+kv_6["kv[nkeys - 1]"]
+
+endOfNode["endOfNode"]
+
+offset_0 --> kv_2
+offset_1 --> kv_8
+offset_3 --> kv_4
+offset_N --> kv_6
+
+offset_s --> endOfNode
+
+class offset_0 offset
+class offset_1 offset
+class offset_3 offset
+class offset_N offset
+class offset_s ptr
+
+class kv_1 op
+class kv_2 op
+class kv_4 op
+class kv_6 op
+class kv_8 op
+
+class endOfNode back
+
+
+
+classDef offset 1,fill:#FFCCCC,stroke:#333;
+classDef ptr fill: #696,color: #fff,font-weight: bold,padding: 10px;
+classDef back fill:#969,stroke:#333;
+classDef op fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
+```
+
 ### Examples
 
-> TODO Figure out the actual configuration of both nodes, including internal node and leaf node.
+> ​	TODO Figure out the actual configuration of both nodes, including internal node and leaf node.
 
 Assuming we have a B+ Tree as follows:
 
