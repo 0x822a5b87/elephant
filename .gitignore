@@ -25,3 +25,5 @@ go.work.sum
 .env
 
 .tags
+
+cmake-build-debug
