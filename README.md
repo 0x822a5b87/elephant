@@ -159,3 +159,8 @@ classDef green  fill:#696,color: #fff,font-weight: bold;
 classDef purple fill:#969,stroke:#333;
 classDef dotted fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
 ```
+
+## reference
+
+- [Build a NoSQL Database From Scratch in 1000 Lines of Code](https://betterprogramming.pub/build-a-nosql-database-from-the-scratch-in-1000-lines-of-code-8ed1c15ed924)
+- [Mini-Redis on Rust](https://tokio.rs/tokio/tutorial)

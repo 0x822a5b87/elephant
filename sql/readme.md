@@ -144,7 +144,7 @@ classDef op fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 
 
 ### Leaf
 
-> `TODO` Figure out how to map offsets to key-value pairs.
+>`TODO` Figure out how to map offsets to key-value pairs.
 
 ```mermaid
 block-beta
@@ -244,7 +244,7 @@ classDef op fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 
 
 ### Examples
 
-> ​	TODO Figure out the actual configuration of both nodes, including internal node and leaf node.
+> **TODO** Figure out the actual configuration of both nodes, including internal node and leaf node.
 
 Assuming we have a B+ Tree as follows:
 
