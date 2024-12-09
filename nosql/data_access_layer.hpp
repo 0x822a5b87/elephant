@@ -4,6 +4,7 @@
 #include "iostream"
 #include "fstream"
 #include "page.hpp"
+#include "freelist.hpp"
 
 #ifndef NOSQL_DATA_ACCESS_LAYER_HPP
 #define NOSQL_DATA_ACCESS_LAYER_HPP
@@ -22,10 +23,12 @@ public:
 
     std::shared_ptr<Page> readPage(PageNum pageNum);
 
-    bool writePage(const std::shared_ptr<Page>& sp_Page);
+    bool writePage(const std::shared_ptr<Page> &sp_Page);
 
 private:
     std::fstream fileStream;
+
+    Freelist freelist;
 
     static std::shared_ptr<Page> allocateEmptyPage();
 };

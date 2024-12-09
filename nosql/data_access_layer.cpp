@@ -5,7 +5,8 @@
 #include "data_access_layer.hpp"
 
 Data_access_layer::Data_access_layer(const char *path)
-        : fileStream(path, std::ios::in | std::ios::out)
+        : fileStream(path, std::ios::in | std::ios::out),
+          freelist()
 {
 }
 
@@ -28,7 +29,7 @@ std::shared_ptr<Page> Data_access_layer::readPage(PageNum pageNum)
     return page;
 }
 
-bool Data_access_layer::writePage(const std::shared_ptr<Page>& sp_Page)
+bool Data_access_layer::writePage(const std::shared_ptr<Page> &sp_Page)
 {
     auto offset = sp_Page->page_num * PAGE_SIZE;
     fileStream.seekp(offset, std::ios::beg);

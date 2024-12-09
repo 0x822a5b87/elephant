@@ -11,6 +11,7 @@ set(HEADER_FILES
 
 set(SOURCE_FILES
         data_access_layer.cpp
+        freelist.cpp
         page.cpp
 )
 
