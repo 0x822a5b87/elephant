@@ -1,10 +1,8 @@
-#include "data_access_layer.hpp"
-#include "page.hpp"
-#include "freelist.hpp"
+#include "freelist_test.cpp"
 
 int main()
 {
-    Freelist freelist;
-
+    TestFreelist();
     return 0;
 }
+

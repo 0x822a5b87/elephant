@@ -21,7 +21,7 @@ public:
 
     PageNum nextPageNum();
 
-    void releasePage(const Page& page);
+    void releasePage(PageNum pageNum);
 };
 
 

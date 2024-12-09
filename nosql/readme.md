@@ -9,6 +9,8 @@
 
 ```bash
 cmake .
+
+make
 ```
 
 ## intro

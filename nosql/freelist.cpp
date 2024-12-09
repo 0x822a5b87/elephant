@@ -2,6 +2,7 @@
 // Created by 0x822a5b87 on 2024/12/9.
 //
 
+#include "cassert"
 #include "freelist.hpp"
 
 Freelist::Freelist()
@@ -20,21 +21,22 @@ PageNum Freelist::nextPageNum()
 {
     if (!releasePages.empty())
     {
-        PageNum pageNum = maxPage;
-        maxPage++;
-        return pageNum;
-    }
-    else
-    {
         PageNum pageNum = releasePages.top();
         releasePages.pop();
         return pageNum;
     }
+    else
+    {
+        PageNum pageNum = maxPage;
+        maxPage++;
+        return pageNum;
+    }
 }
 
-void Freelist::releasePage(const Page &page)
+void Freelist::releasePage(const PageNum pageNum)
 {
+    assert(pageNum < maxPage);
     // actually, there is no need to manage the max page number because the allocation
     // begins at the release pages.
-    this->releasePages.push(page.page_num);
+    this->releasePages.push(pageNum);
 }
