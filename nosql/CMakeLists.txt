@@ -18,6 +18,9 @@ set(SOURCE_FILES
         meta.cpp
 )
 
+set(RAPIDJSON_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include/rapidjson/include)
+
+include_directories(${RAPIDJSON_INCLUDE_DIRS})
 
 add_executable(nosql main.cpp ${SOURCE_FILES})
 
