@@ -4,10 +4,13 @@
 #include "iostream"
 #include "fstream"
 #include "page.hpp"
+#include "meta.hpp"
 #include "freelist.hpp"
 
 #ifndef NOSQL_DATA_ACCESS_LAYER_HPP
 #define NOSQL_DATA_ACCESS_LAYER_HPP
+
+const static PageNum META_PAGE_NUM = 0;
 
 // Data Access Layer : handles all disk operations and how data is organized on the disk.
 // It's responsible for managing the underlying data structure, writing the database
@@ -19,7 +22,6 @@ public:
 
     ~Data_access_layer();
 
-    void write(const char *text);
 
     std::shared_ptr<Page> readPage(PageNum pageNum);
 
@@ -29,6 +31,16 @@ private:
     std::fstream fileStream;
 
     Freelist freelist;
+
+    Meta meta;
+
+    Meta readMeta();
+
+    void saveMeta();
+
+    Freelist readFreelist();
+
+    void saveFreelist();
 
     static std::shared_ptr<Page> allocateEmptyPage();
 };

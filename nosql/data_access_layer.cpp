@@ -5,9 +5,28 @@
 #include "data_access_layer.hpp"
 
 Data_access_layer::Data_access_layer(const char *path)
-        : fileStream(path, std::ios::in | std::ios::out),
-          freelist()
+        : fileStream(path, std::ios::in | std::ios::out)
 {
+    if (fileStream.is_open())
+    {
+        // read from history data
+        meta     = readMeta();
+        freelist = readFreelist();
+    }
+    else
+    {
+        // create a new database
+        fileStream.open(path, std::ios::in | std::ios::out | std::ios::app);
+        if (!fileStream.is_open())
+        {
+            std::cerr << "Failed to open file : " << path << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+        // create new freelist and store it into the disk
+        meta.freelistPageNum = freelist.nextPageNum();
+        saveFreelist();
+        saveMeta();
+    }
 }
 
 Data_access_layer::~Data_access_layer()
@@ -15,9 +34,10 @@ Data_access_layer::~Data_access_layer()
     std::cout << "Destruct Data_access_layer" << std::endl;
 }
 
-void Data_access_layer::write(const char *text)
+Meta Data_access_layer::readMeta()
 {
-    fileStream << text << std::endl;
+    auto metaPage = this->readPage(META_PAGE_NUM);
+    return Meta::deserialize(*metaPage->page_data);
 }
 
 std::shared_ptr<Page> Data_access_layer::readPage(PageNum pageNum)
@@ -41,5 +61,28 @@ std::shared_ptr<Page> Data_access_layer::allocateEmptyPage()
 {
     const auto &r_PageData = std::make_shared<PageData>();
     return std::make_shared<Page>(r_PageData);
+}
+
+
+Freelist Data_access_layer::readFreelist()
+{
+    auto freelistPage = this->readPage(meta.freelistPageNum);
+    return Freelist::deserialize(freelistPage->page_data);
+}
+
+void Data_access_layer::saveMeta()
+{
+    auto pageForMeta = Data_access_layer::allocateEmptyPage();
+    pageForMeta->page_num  = META_PAGE_NUM;
+    pageForMeta->page_data = std::make_shared<PageData>(meta.serialize());
+    this->writePage(pageForMeta);
+}
+
+void Data_access_layer::saveFreelist()
+{
+    auto pageForFreelist = Data_access_layer::allocateEmptyPage();
+    pageForFreelist->page_num  = meta.freelistPageNum;
+    pageForFreelist->page_data = std::make_shared<PageData>(freelist.serialize());
+    this->writePage(pageForFreelist);
 }
 

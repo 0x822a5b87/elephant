@@ -5,23 +5,23 @@
 #include "freelist.hpp"
 #include "cassert"
 
-static void TestEmptyNewPage()
+static void testEmptyNewPage()
 {
     Freelist f;
     assert(f.maxPage == 0);
     assert(f.releasePages.empty());
     PageNum page_num = f.nextPageNum();
-    assert(page_num == 0);
+    assert(page_num == 1);
 }
 
-static void TestSuccessiveAllocation()
+static void testSuccessiveAllocation()
 {
     Freelist freelist;
-    int i;
+    int      i;
     for (i = 0; i < 10; ++i)
     {
         PageNum page_num = freelist.nextPageNum();
-        assert(page_num == i);
+        assert(page_num == i + 1);
     }
 
     for (i = 0; i < 10; ++i)
@@ -38,6 +38,6 @@ static void TestSuccessiveAllocation()
 
 static void TestFreelist()
 {
-    TestEmptyNewPage();
-    TestSuccessiveAllocation();
+    testEmptyNewPage();
+    testSuccessiveAllocation();
 }

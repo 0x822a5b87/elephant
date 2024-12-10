@@ -17,11 +17,17 @@ public:
 
     Freelist();
 
+    Freelist(PageNum maxPage, std::priority_queue<PageNum> releasePages);
+
     virtual ~Freelist();
 
     PageNum nextPageNum();
 
     void releasePage(PageNum pageNum);
+
+    PageData serialize() const;
+
+    static Freelist deserialize(const std::shared_ptr<PageData>&);
 };
 
 
