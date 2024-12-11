@@ -10,13 +10,13 @@
 #include "array"
 
 #ifdef __elephant_nosql_release__
-constexpr long PAGE_SIZE = 4 * 1024; // 4KB
+constexpr size_t PAGE_SIZE = 4 * 1024; // 4KB
 #else
-constexpr long PAGE_SIZE = 16; // 16B
+constexpr size_t PAGE_SIZE = 64; // 64B
 #endif
 
-typedef unsigned char               Byte;
-typedef long                        PageNum;
+typedef char                        Byte;
+typedef long long                   PageNum;
 typedef std::array<Byte, PAGE_SIZE> PageData;
 
 class Page
@@ -33,38 +33,7 @@ public:
 
     virtual ~Page();
 
-    static void write(PageData &pageData, size_t offset, PageNum value)
-    {
-        for (size_t i = 0; i < sizeof(PageNum); i++) {
-            pageData[offset + i] = static_cast<Byte>(value >> (8 * i));
-        }
-    }
-
-    static void write(PageData &pageData, size_t offset, size_t value)
-    {
-        for (size_t i = 0; i < sizeof(size_t); i++) {
-            pageData[offset + i] = static_cast<Byte>(value >> (8 * i));
-        }
-    }
-
-    static PageNum read(PageData &pageData, size_t offset) {
-        long value = 0;
-        for (size_t i = 0; i < sizeof(PageNum); i++) {
-            value |= static_cast<long>(pageData[offset + i]) << (8 * i);
-        }
-        return value;
-    }
-
-    static size_t readSize(PageData  &pageData, size_t offset) {
-        long value = 0;
-        for (size_t i = 0; i < sizeof(PageNum); i++) {
-            value |= static_cast<long>(pageData[offset + i]) << (8 * i);
-        }
-        return value;
-    }
-
 private:
 };
-
 
 #endif //NOSQL_PAGE_HPP

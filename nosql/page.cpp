@@ -12,7 +12,4 @@ Page::Page(PageNum pageNum, const std::shared_ptr<PageData>& pageData) : page_nu
 {
 }
 
-Page::~Page()
-{
-    std::cout << "Destruct Page : " << page_num << std::endl;
-}
+Page::~Page() = default;

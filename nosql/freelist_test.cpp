@@ -4,6 +4,7 @@
 
 #include "freelist.hpp"
 #include "cassert"
+#include "data_access_layer.hpp"
 
 static void testEmptyNewPage()
 {
@@ -33,11 +34,38 @@ static void testSuccessiveAllocation()
     }
 
     assert(freelist.releasePages.size() == 5);
-    assert(freelist.nextPageNum() == 8);
+    assert(freelist.nextPageNum() == 0);
+}
+
+static void testSerializerAndDeserializer() {
+    Freelist freelist;
+    PageNum maxPage = 10;
+    freelist.maxPage = maxPage;
+
+    const auto pageNums = std::vector<PageNum>{0, 1, 2, 3, 4};
+    for (const auto &item: pageNums)
+    {
+        freelist.releasePages.push(item);
+    }
+    auto pageData = freelist.Serialize();
+    auto pd = std::make_shared<PageData>(pageData);
+    Freelist f = Freelist::Deserialize(pd);
+
+    assert(f.maxPage == maxPage);
+
+    auto newPageNums = std::vector<PageNum>();
+    for (const auto &item: pageNums)
+    {
+        auto p = f.releasePages.top();
+        newPageNums.push_back(p);
+        f.releasePages.pop();
+    }
+    assert(pageNums == newPageNums);
 }
 
 static void TestFreelist()
 {
     testEmptyNewPage();
     testSuccessiveAllocation();
+    testSerializerAndDeserializer();
 }

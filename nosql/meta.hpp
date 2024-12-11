@@ -18,9 +18,9 @@ public:
 
     PageNum freelistPageNum;
 
-    PageData serialize() const;
+    PageData Serialize() const;
 
-    static Meta deserialize(PageData&);
+    static Meta Deserialize(std::shared_ptr<PageData> &pageData);
 };
 
 
