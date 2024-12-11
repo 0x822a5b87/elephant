@@ -11,6 +11,5 @@ void RunTest() {
 
 int main() {
     RunTest();
-
     return 0;
 }

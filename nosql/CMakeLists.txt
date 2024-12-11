@@ -5,22 +5,22 @@ project(nosql)
 set(CMAKE_CXX_STANDARD 11)
 
 set(HEADER_FILES
-        data_access_layer.hpp
-        freelist.hpp
-        page.hpp
-        meta.hpp
+        src/data_access_layer.hpp
+        src/freelist.hpp
+        src/page.hpp
+        src/meta.hpp
 )
 
 set(SOURCE_FILES
-        data_access_layer.cpp
-        freelist.cpp
-        page.cpp
-        meta.cpp
+        src/data_access_layer.cpp
+        src/freelist.cpp
+        src/page.cpp
+        src/meta.cpp
 )
 
 set(RAPIDJSON_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include/rapidjson/include)
 
 include_directories(${RAPIDJSON_INCLUDE_DIRS})
 
-add_executable(nosql main.cpp ${SOURCE_FILES})
+add_executable(nosql src/main.cpp ${SOURCE_FILES})
 
