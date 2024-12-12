@@ -9,6 +9,8 @@ set(HEADER_FILES
         src/freelist.hpp
         src/page.hpp
         src/meta.hpp
+        src/item.hpp
+        src/node.hpp
 )
 
 set(SOURCE_FILES
@@ -16,6 +18,8 @@ set(SOURCE_FILES
         src/freelist.cpp
         src/page.cpp
         src/meta.cpp
+        src/item.cpp
+        src/node.cpp
 )
 
 set(RAPIDJSON_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include/rapidjson/include)

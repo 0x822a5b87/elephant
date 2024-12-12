@@ -12,7 +12,7 @@
 #ifdef __elephant_nosql_release__
 constexpr size_t PAGE_SIZE = 4 * 1024; // 4KB
 #else
-constexpr size_t PAGE_SIZE = 64; // 64B
+constexpr size_t PAGE_SIZE = 128; // 64B
 #endif
 
 typedef char                        Byte;
