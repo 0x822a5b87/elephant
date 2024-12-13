@@ -15,6 +15,8 @@ make
 
 ## intro
 
+> _I have to mention that C++ is really not my preferred type. Poor package management, poor IDE support, and obscure syntax have caused me to spend a lot of time on some useless syntax details. Perhaps it's just because I'm not familiar enough with C++, but it does frustrate me a lot._
+
 Build a `NoSQL` from scratch.
 
 Databases use different data structures to organize pages on the disk, mostly B/B+ Trees and Hash buckets.

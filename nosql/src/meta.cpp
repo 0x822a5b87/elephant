@@ -10,10 +10,10 @@
 
 Meta::~Meta() = default;
 
-Meta::Meta(PageNum freelistPageNum) : freelistPageNum(freelistPageNum)
+Meta::Meta(PageNum freelistPageNum) : freelistPageNum(freelistPageNum), root(0)
 {}
 
-Meta::Meta() : freelistPageNum(0)
+Meta::Meta() : Meta(0)
 {}
 
 PageData Meta::Serialize() const
@@ -22,9 +22,9 @@ PageData Meta::Serialize() const
     Document doc;
     doc.SetObject();
     auto allocator = doc.GetAllocator();
-    auto fpn       = static_cast<long long >(freelistPageNum);
 
-    doc.AddMember("freelistPageNum", fpn, allocator);
+    doc.AddMember("freelistPageNum", static_cast<long long >(freelistPageNum), doc.GetAllocator());
+    doc.AddMember("root", static_cast<long long >(root), doc.GetAllocator());
 
     StringBuffer         buffer;
     Writer<StringBuffer> writer(buffer);
@@ -48,5 +48,6 @@ Meta Meta::Deserialize(std::shared_ptr<PageData> &pageData)
     Document   value;
     value.Parse(json);
     meta.freelistPageNum = value["freelistPageNum"].GetUint();
+    meta.root            = value["root"].GetUint();
     return meta;
 }

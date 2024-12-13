@@ -5,8 +5,7 @@
 #include "iostream"
 #include "node.hpp"
 
-void compareVectorByte(const std::shared_ptr<std::vector<Byte>> &l,
-                       const std::shared_ptr<std::vector<Byte>> &r)
+void compareVectorByte(const CharsData &l,const CharsData &r)
 {
     assert(l->size() == r->size());
     for (auto i = 0; i < l->size(); ++i)
@@ -19,24 +18,24 @@ void testNode()
 {
     std::shared_ptr<std::vector<Item>> items = std::make_shared<std::vector<Item>>();;
 
-    std::shared_ptr<std::vector<Byte>> k1 = std::make_shared<std::vector<Byte>>();
+    CharsData k1 = std::make_shared<std::vector<Byte>>();
     k1->push_back('k');
     k1->push_back('1');
-    std::shared_ptr<std::vector<Byte>> v1 = std::make_shared<std::vector<Byte>>();
+    CharsData v1 = std::make_shared<std::vector<Byte>>();
     v1->push_back('v');
     v1->push_back('1');
 
-    std::shared_ptr<std::vector<Byte>> k2 = std::make_shared<std::vector<Byte>>();
+    CharsData k2 = std::make_shared<std::vector<Byte>>();
     k2->push_back('k');
     k2->push_back('2');
-    std::shared_ptr<std::vector<Byte>> v2 = std::make_shared<std::vector<Byte>>();
+    CharsData v2 = std::make_shared<std::vector<Byte>>();
     v2->push_back('v');
     v2->push_back('2');
 
-    std::shared_ptr<std::vector<Byte>> k3 = std::make_shared<std::vector<Byte>>();
+    CharsData k3 = std::make_shared<std::vector<Byte>>();
     k3->push_back('k');
     k3->push_back('3');
-    std::shared_ptr<std::vector<Byte>> v3 = std::make_shared<std::vector<Byte>>();
+    CharsData v3 = std::make_shared<std::vector<Byte>>();
     v3->push_back('v');
     v3->push_back('3');
 
@@ -47,25 +46,25 @@ void testNode()
     std::shared_ptr<std::vector<PageNum>> pages = std::make_shared<std::vector<PageNum>>();;
 
     auto oldNode = Node(items, pages, true);
-    auto page    = std::make_shared<PageData>(oldNode.Serialize());
+    auto page    = oldNode.Serialize();
 
-    Node newNode = Node::Deserialize(page);
+    auto newNode = Node::Deserialize(page);
 
-    assert(oldNode.IsLeaf == newNode.IsLeaf);
-    assert(oldNode.items->size() == newNode.items->size());
+    assert(oldNode.IsLeaf == newNode->IsLeaf);
+    assert(oldNode.items->size() == newNode->items->size());
     for (auto i = 0; i < oldNode.items->size(); ++i)
     {
         Item &o = (*oldNode.items)[i];
-        Item &n = (*newNode.items)[i];
+        Item &n = (*newNode->items)[i];
         compareVectorByte(o.key, n.key);
         compareVectorByte(o.val, n.val);
     }
 
-    assert(oldNode.children->size() == newNode.children->size());
+    assert(oldNode.children->size() == newNode->children->size());
     for (auto i = 0; i < oldNode.children->size(); ++i)
     {
         PageNum o = (*oldNode.children)[i];
-        PageNum n = (*newNode.children)[i];
+        PageNum n = (*newNode->children)[i];
         assert(o == n);
     }
 }

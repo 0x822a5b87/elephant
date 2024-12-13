@@ -10,13 +10,45 @@
 class Item
 {
 public:
-    Item(std::shared_ptr<std::vector<Byte>> &key,
-         std::shared_ptr<std::vector<Byte>> &val);
+    Item(CharsData &key,
+         CharsData &val);
 
     virtual ~Item() = default;
 
-    const std::shared_ptr<std::vector<Byte>> key;
-    const std::shared_ptr<std::vector<Byte>> val;
+    void valid() const;
+
+    static int compare(const Item &left, const Item &right)
+    {
+        left.valid();
+        right.valid();
+
+        auto leftSize  = left.key->size();
+        auto rightSize = right.key->size();
+
+        for (auto i = 0; i < leftSize && i < rightSize; ++i)
+        {
+            if ((*left.key)[i] > (*right.key)[i])
+            {
+                return 1;
+            }
+        }
+
+        if (leftSize > rightSize)
+        {
+            return 1;
+        }
+        else if (leftSize < rightSize)
+        {
+            return -1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    const CharsData key;
+    const CharsData val;
 };
 
 #endif //NOSQL_ITEM_HPP

@@ -19,6 +19,8 @@ typedef char                        Byte;
 typedef long long                   PageNum;
 typedef std::array<Byte, PAGE_SIZE> PageData;
 
+typedef std::shared_ptr<std::vector<Byte>> CharsData;
+
 class Page
 {
 public:
@@ -32,6 +34,8 @@ public:
     Page(PageNum page_num, const std::shared_ptr<PageData> &data);
 
     virtual ~Page();
+
+    static CharsData GenCharsData(const char *str);
 
 private:
 };

@@ -12,20 +12,23 @@
 class Node
 {
 public:
+    Node();
+
     Node(const std::shared_ptr<std::vector<Item>> &items,
          const std::shared_ptr<std::vector<PageNum>> &children,
          bool isLeaf);
 
     virtual ~Node();
 
-    PageData Serialize() const;
+    std::shared_ptr<PageData> Serialize() const;
 
-    static Node Deserialize(std::shared_ptr<PageData> &pageData);
+    static std::shared_ptr<Node> Deserialize(std::shared_ptr<PageData> &pageData);
 
     std::shared_ptr<std::vector<Item>>    items;
     std::shared_ptr<std::vector<PageNum>> children;
 
-    bool IsLeaf;
+    bool    IsLeaf;
+    PageNum pn;
 
 private:
 };

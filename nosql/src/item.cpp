@@ -3,9 +3,16 @@
 //
 
 #include "item.hpp"
+#include "cassert"
 
-Item::Item(std::shared_ptr<std::vector<Byte>> &key,
-           std::shared_ptr<std::vector<Byte>> &val)
+Item::Item(CharsData &key,
+           CharsData &val)
         : key(key),
           val(val)
 {}
+
+void Item::valid() const
+{
+    assert(key != nullptr);
+    assert(val != nullptr);
+}

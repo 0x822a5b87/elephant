@@ -6,7 +6,6 @@
 #ifndef NOSQL_META_HPP
 #define NOSQL_META_HPP
 
-
 class Meta
 {
 public:
@@ -16,11 +15,14 @@ public:
 
     virtual ~Meta();
 
-    PageNum freelistPageNum;
-
     PageData Serialize() const;
 
     static Meta Deserialize(std::shared_ptr<PageData> &pageData);
+
+    PageNum freelistPageNum;
+
+    // root of B-Tree
+    PageNum root;
 };
 
 

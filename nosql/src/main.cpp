@@ -3,6 +3,7 @@
 #include "meta_test.cpp"
 #include "data_access_layer_test.cpp"
 #include "node_test.cpp"
+#include "item_test.cpp"
 
 void RunTest()
 {
@@ -10,6 +11,7 @@ void RunTest()
     TestMeta();
     TestDataAccessLayer();
     TestNode();
+    TestItem();
 }
 
 int main()

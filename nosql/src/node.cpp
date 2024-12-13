@@ -57,6 +57,12 @@ rapidjson::StringBuffer serializeData(const Node &node)
     return buffer;
 }
 
+Node::Node()
+{
+    items    = std::make_shared<std::vector<Item>>();
+    children = std::make_shared<std::vector<PageNum>>();
+    IsLeaf   = true;
+}
 
 Node::Node(const std::shared_ptr<std::vector<Item>> &items,
            const std::shared_ptr<std::vector<PageNum>> &children,
@@ -69,7 +75,7 @@ Node::~Node() = default;
 // NOTE: I'm pretty sure there are many more effective and elegant ways
 // to implement it, but this is really trivial and worthless to do it for a non-productive project.
 // YES! I'm indolent and procrastinating, just as you are.
-PageData Node::Serialize() const
+std::shared_ptr<PageData> Node::Serialize() const
 {
     const rapidjson::StringBuffer &header    = serializeHeader(*this);
     const rapidjson::StringBuffer &pairs     = serializeData(*this);
@@ -79,15 +85,15 @@ PageData Node::Serialize() const
     const char *headerString = header.GetString();
     const char *dataString   = pairs.GetString();
 
-    std::array<Byte, PAGE_SIZE> pd{};
+    auto pd = std::make_shared<std::array<Byte, PAGE_SIZE>>();
     // leave a '\0' between header and pairs
     assert(headerSize + dataSize < PAGE_SIZE - 1);
-    std::copy(headerString, headerString + headerSize, pd.begin());
-    std::copy(dataString, dataString + dataSize, pd.end() - dataSize);
+    std::copy(headerString, headerString + headerSize, pd->begin());
+    std::copy(dataString, dataString + dataSize, pd->begin() + headerSize + 1);
     return pd;
 }
 
-Node Node::Deserialize(std::shared_ptr<PageData> &pageData)
+std::shared_ptr<Node> Node::Deserialize(std::shared_ptr<PageData> &pageData)
 {
     using namespace std;
     using namespace rapidjson;
@@ -96,14 +102,17 @@ Node Node::Deserialize(std::shared_ptr<PageData> &pageData)
     Document header;
     header.Parse(slottedPage);
     auto isLeaf = header["IsLeaf"].GetBool();
-    auto offset = header["Offset"].GetInt64();
+    while (*slottedPage != '\0')
+    {
+        slottedPage++;
+    }
 
-    const char *p = slottedPage + offset;
+    const char *p = slottedPage + 1;
     Document   pairs;
     pairs.Parse(p);
 
 
-    auto items   = make_shared<vector<Item>>();
+    auto items    = make_shared<vector<Item>>();
     auto children = make_shared<vector<PageNum>>();
 
     for (const auto &pair: pairs.GetArray())
@@ -119,7 +128,5 @@ Node Node::Deserialize(std::shared_ptr<PageData> &pageData)
         items->emplace_back(key, val);
     }
 
-    Node node(items, children, isLeaf);
-
-    return node;
+    return std::make_shared<Node>(items, children, isLeaf);
 }
