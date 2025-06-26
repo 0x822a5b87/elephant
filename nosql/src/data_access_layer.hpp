@@ -7,6 +7,7 @@
 #include "meta.hpp"
 #include "freelist.hpp"
 #include "node.hpp"
+#include "options.hpp"
 
 #ifndef NOSQL_DATA_ACCESS_LAYER_HPP
 #define NOSQL_DATA_ACCESS_LAYER_HPP
@@ -28,6 +29,8 @@ class Data_access_layer
 {
 public:
     explicit Data_access_layer(const char *path);
+
+    Data_access_layer(const char *path, const Options *options);
 
     ~Data_access_layer();
 

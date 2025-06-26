@@ -4,8 +4,11 @@
 
 #include "data_access_layer.hpp"
 
-Data_access_layer::Data_access_layer(const char *path)
-        : fileStream(path, std::ios::in | std::ios::out | std::ios::binary)
+Data_access_layer::Data_access_layer(const char *path) : Data_access_layer(path, nullptr)
+{
+}
+
+Data_access_layer::Data_access_layer(const char *path, const Options *options)
 {
     if (fileStream.is_open())
     {
@@ -121,20 +124,37 @@ SearchNodeResult Data_access_layer::searchRecursive(std::shared_ptr<Node> &node,
 SearchNodeResult Data_access_layer::searchInNode(std::shared_ptr<Node> &node, const Item &item)
 {
     size_t index = 0;
-    for (; index < node->items->size(); ++index)
+
+    for (const auto &existingItem: (*node->items))
     {
-        auto cmp = Item::compare(item, (*node->items)[index]);
+        auto cmp = Item::compare(existingItem, item);
         if (cmp == 0)
         {
             // item == it
             return {true, index};
         }
-        else if (cmp == -1)
+            // TODO check if the result of compared value should be 1 or -1
+        else if (cmp == 1)
         {
             // item < it
             return {false, index};
         }
     }
+//    for (; index < node->items->size(); ++index)
+//    {
+//        auto cmp = Item::compare(item, (*node->items)[index]);
+//        if (cmp == 0)
+//        {
+//            // item == it
+//            return {true, index};
+//        }
+//        // TODO check if the result of compared value should be 1 or -1
+//        else if (cmp == -1)
+//        {
+//            // item < it
+//            return {false, index};
+//        }
+//    }
     return {false, index};
 }
 
@@ -181,4 +201,5 @@ void Data_access_layer::initFreelist()
     pageForFreelist->page_data = std::make_shared<PageData>(freelist.Serialize());
     this->writePage(pageForFreelist);
 }
+
 
