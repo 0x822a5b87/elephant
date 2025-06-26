@@ -2,10 +2,15 @@ from typing import Callable, Any, Optional
 
 
 class Record:
-    def __init__(self, key: str, value: Any, timestamp: float):
+    def __init__(self, key: str, value: Any, timestamp: int):
         self.key = key
         self.value = value
         self.timestamp = timestamp
+
+    def __eq__(self, other):
+        return (self.key == other.key
+                and self.value == other.value
+                and self.timestamp == other.timestamp)
 
 
 class Database:

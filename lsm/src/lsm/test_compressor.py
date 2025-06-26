@@ -17,7 +17,7 @@ def test_unpack():
     assert unpacked_record.key == "abc"
     assert unpacked_record.timestamp == 123
     assert unpacked_record.value == "xyz"
-    assert isinstance(unpacked_record.timestamp, float)
+    assert isinstance(unpacked_record.timestamp, int)
     assert isinstance(unpacked_record.value, str)
     assert isinstance(unpacked_record.key, str)
-    assert float(unpacked_record.timestamp) == 123.0
+    assert unpacked_record.timestamp == 123

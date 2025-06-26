@@ -31,7 +31,7 @@ class StrCompressor(Compressor):
         assert len(fields) == 3, f"malformed compressed record: {result}"
         key, timestamp, value = fields
         assert timestamp.isdigit(), f"malformed timestamp: {result}"
-        return Record(key, value, float(timestamp))
+        return Record(key, value, int(timestamp))
 
     def pack_multi(self, records: list[Record]) -> bytes:
         result = b""
