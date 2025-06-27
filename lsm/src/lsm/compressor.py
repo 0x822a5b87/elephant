@@ -8,6 +8,12 @@ class Compressor:
     def unpack(self, binary_data: bytes) -> Record:
         """pack the data"""
 
+    def pack_multi(self, records: list[Record]) -> bytes:
+        """pack multiple data"""
+
+    def unpack_multi(self, binary_data: bytes) -> list[Record]:
+        """unpack multiple data"""
+
 
 class StrCompressor(Compressor):
     def __init__(self,
